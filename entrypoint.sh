@@ -52,8 +52,8 @@ if [ -n "$PORT_FILE" ] && [ -s "$PORT_FILE" ]; then
 fi
 
 if [[ "${FILTER_LOGS:-false}" == "true" ]]; then
-    exec su appuser -c "/app/start-engine --client-console $EXTRA_FLAGS \"$@\" 2>&1 \
-        | grep -v \"zc|run: got socket error\""
+    exec /app/start-engine --client-console $EXTRA_FLAGS "$@" 2>&1 \
+        | grep -v "zc|run: got socket error"
 else
-    exec su appuser -c "/app/start-engine --client-console $EXTRA_FLAGS \"$@\""
+    exec /app/start-engine --client-console $EXTRA_FLAGS "$@"
 fi
