@@ -6,5 +6,14 @@ services:
       - '6878:6878'
     environment:
       - ALLOW_REMOTE_ACCESS=no # change to "yes" to allow internet access
-      # add any extra command line option mentioned in https://docs.acestream.net/developers/engine-command-line-options/
-      - EXTRA_FLAGS=''
+      - EXTRA_FLAGS= # Add any extra command line options here (from https://docs.acestream.net/developers/engine-command-line-options/),
+                     # DO NOT USE QUOTES. Ex: EXTRA_FLAGS=--cache-max-bytes 2000
+      - FILTER_LOGS=false # Set to "true" to filter logs from network error messages caused when not executing the
+                          # container binded to the host network, that are irrelevant and in 10s intervals.
+                          # "false" to disable this filtering
+      - PORT_FILE=/portfolder/portfile.txt # if not specified or empty, no file with port written will be used to update the P2P port
+      - P2P_PORT=8621 # If not specified. Will use the default port 8621 if not specified. Ignored if PORT_FILE exists
+      - HTTP_PORT=6878 # Port for HTTP access. Will use the default 6878 if not specified
+    volumes:
+      - /port/folder:/portfolder:ro # Optional: Mount a folder to read the port file, if PORT_FILE is set
+    restart: unless-stopped # Optional. Required if using PORT_FILE to apply new ports properly

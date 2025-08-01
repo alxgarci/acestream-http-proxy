@@ -42,7 +42,7 @@ where `dd1e67078381739d14beca697356ab76d49d1a2d` is the ID of the AceStream chan
 This image can also be deployed to a server, where it can proxy AceStream
 content over HTTP. To able to reach it from remote you need to set ALLOW_REMOTE_ACCESS=yes as environment variable  
 
-You can also run it using docker-compose with
+You can also run it using docker-compose with ([environment variables](#environment-variables))
 
 ```yaml
 ---
@@ -52,9 +52,30 @@ services:
     container_name: acestream-http-proxy
     ports:
       - 6878:6878
+    environment:
+      - ALLOW_REMOTE_ACCESS=yes
+      - P2P_PORT=8621
+      - HTTP_PORT=6878
+      # See available environment variables and sample docker-compose below or in https://github.com/alxgarci/acestream-http-proxy?tab=readme-ov-file#environment-variables
 ```
 
-for an example, see the [docker-compose.yml](./docker-compose.yml) file in this repository.
+## Environment Variables
+
+Below is a table listing the available environment variables for configuring the container:
+
+| Variable              | Required | Description                                                        | Default Value                  |
+|-----------------------|----------|--------------------------------------------------------------------|-------------------------------|
+| `ALLOW_REMOTE_ACCESS` | No       | Allows remote access to the AceStream engine (`yes` to enable).    | `no`                          |
+| `P2P_PORT`            | No       | P2P port for AceStream engine.                                     | `8621`                        |
+| `HTTP_PORT`           | No       | Port for HTTP access to AceStream engine.                          | `6878`                        |
+| `PORT_FILE`           | No       | Path to file containing the P2P port. If empty, uses `P2P_PORT`. If filled, the port file should only contain the PORT to be assigned to the engine, will check the file for changes every 10 seconds and will kill the container if so. Need `restart: unless-stopped` while creating the container to apply the new port.   | _empty_                     |
+| `EXTRA_FLAGS`         | No       | Additional command-line flags for AceStream engine. No quotes.                | _empty_                     |
+| `FILTER_LOGS`         | No       | If `true`, filters noisy logs from engine output due to engine network not being wide open.               | `false`                       |
+
+**Notes:**
+- If a variable is not defined or left blank, the default value will be used.
+- To enable remote access through HTTP_PORT, set `ALLOW_REMOTE_ACCESS=yes` when starting the container.
+- For a sample compose file, see the [docker-compose.yml](./docker-compose.yml) file in this repository.
 
 ## Contributing
 

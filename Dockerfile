@@ -24,7 +24,11 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 ENV VERSION="3.2.3_ubuntu_22.04_x86_64_py3.10" \
     ALLOW_REMOTE_ACCESS="no" \
-    EXTRA_FLAGS=''
+    EXTRA_FLAGS= \
+    P2P_PORT=8621 \
+    PORT_FILE= \
+    HTTP_PORT=6878 \
+    FILTER_LOGS=false
 
 USER root
 WORKDIR /app
